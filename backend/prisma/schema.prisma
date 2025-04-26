@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String     @id @default(uuid())
+  name     String?
+  email    String     @unique
+  password String?
+  trips    UserTrip[]
+  Trip     Trip[]
+
+  @@map("users")
+}
+
+model Trip {
+  id           String     @id @default(uuid())
+  destination  String
+  starts_at    DateTime
+  ends_at      DateTime
+  is_confirmed Boolean    @default(false)
+  created_at   DateTime   @default(now())
+  owner        User       @relation(fields: [owner_id], references: [id])
+  owner_id     String
+  participants UserTrip[] 
+  activities   Activity[]
+  links        Link[]
+
+  @@map("trips")
+}
+
+model UserTrip {
+  id          String  @id @default(uuid())
+  userId      String?
+  tripId      String
+  email       String
+  isOwner     Boolean @default(false)
+  isConfirmed Boolean @default(false)
+
+  user User? @relation(fields: [userId], references: [id])
+  trip Trip  @relation(fields: [tripId], references: [id])
+
+  @@map("user_trips")
+}
+
+model Activity {
+  id        String   @id @default(uuid())
+  title     String
+  occurs_at DateTime
+
+  trip    Trip   @relation(fields: [trip_id], references: [id])
+  trip_id String
+
+  @@map("activities")
+}
+
+model Link {
+  id    String @id @default(uuid())
+  title String
+  url   String
+
+  trip    Trip   @relation(fields: [trip_id], references: [id])
+  trip_id String
+
+  @@map("links")
+}
