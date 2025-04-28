@@ -64,7 +64,6 @@ export const ActivitiesList = ({ handleCreateActivityModal }: ActivitiesListProp
     useEffect(() => {
         if (trip_id) {
             listActivities(trip_id)
-            console.log(activities)
         }
     }, [])
 

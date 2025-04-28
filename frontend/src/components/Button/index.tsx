@@ -1,5 +1,6 @@
 import { ComponentProps, ReactNode } from "react";
 import { tv, VariantProps } from "tailwind-variants";
+import { cn } from "../../utils/cn";
 
 interface ButtonProps extends ComponentProps<'button'>, VariantProps<typeof buttonVariants> {
     children: ReactNode;
@@ -18,6 +19,7 @@ const buttonVariants = tv({
         size: {
             default: 'py-2',
             full: 'w-full h-11',
+            mobile: 'w-full h-5'
         }
     },
 
@@ -28,9 +30,9 @@ const buttonVariants = tv({
 })
 
 
-export const Button = ({ children, variant, size, ...props }: ButtonProps) => {
+export const Button = ({ children, variant, size, className, ...props }: ButtonProps) => {
     return (
-        <button {...props} className={buttonVariants({ variant, size })}>
+        <button {...props} className={cn(buttonVariants({ variant, size }), className)}>
             {children}
         </button>
     )
